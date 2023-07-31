@@ -43,7 +43,7 @@
     if (localStorage.getItem('rollno') && localStorage.getItem('password')) {
         const rollno = localStorage.getItem('rollno');
         const password = localStorage.getItem('password');
-        fetch('http://localhost:7000/access', {
+        fetch('https://net-access.onrender.com/access', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -77,7 +77,7 @@
         const rollno = document.getElementById('rollno').value;
         const password = document.getElementById('password').value;
         
-        fetch('http://localhost:7000/access', {
+        fetch('https://net-access.onrender.com/access', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
