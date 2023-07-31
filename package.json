@@ -15,5 +15,8 @@
     "path": "^0.12.7",
     "puppeteer-core": "^20.9.0",
     "selenium-webdriver": "^4.10.0"
+  },
+  "engines": {
+    "node": "16.13.0"
   }
 }
