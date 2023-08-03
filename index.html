@@ -15,7 +15,7 @@
         </div>
         <hr>
         <div class="row m-3">
-            <div class="col-md-4 mx-auto">
+            <div class="col-md-5 mx-auto">
                 <div class="mb-3">
                     <label for="rollno" class="form-label">Roll No</label>
                     <input type="text" class="form-control" id="rollno" name="rollno" aria-describedby="rollno">
@@ -24,14 +24,27 @@
                     <label for="password" class="form-label">Password</label>
                     <input type="text" class="form-control" id="password" name="password">
                 </div>
+                <div class="mb-3">
+                    <label for="browser" class="form-label">Your Browser</label>
+                    <select class="form-select" id="browser" name="browser">
+                        <option value="chrome">Chrome (Recommended)</option>
+                        <option value="firefox">Firefox</option>
+                        <option value="MicrosoftEdge">Microsoft-Edge</option>
+                    </select>
+                </div>
                 <button type="submit" class="btn btn-primary" id="submit">Submit</button>
             </div>
         </div>
+       
         <hr>
         <div id="result" class="mx-auto" style="display: none; text-align: center;">
         </div>
         <hr>
-        <p class="m-2"><b>Note:</b> You need to enter your credentials correctly only once; after that, they will be saved in the browser. If you visit the website again, it will automatically retrieve your saved credentials.</p>
+        <p class="m-2"><b>Note:</b> You need to enter your credentials correctly only once; after that, 
+            they will be saved in the localStorage. If you open the web app again, 
+            it will automatically retrieve your saved credentials. If you want to change your credentials,
+            you can do so by entering your new credentials and clicking on submit. Upon successful login, the app closes after 2 seconds.
+        </p>
     </div>
 </body>
 </html>
@@ -43,25 +56,30 @@
     if (localStorage.getItem('rollno') && localStorage.getItem('password')) {
         const rollno = localStorage.getItem('rollno');
         const password = localStorage.getItem('password');
-        fetch('https://net-access.onrender.com/access', {
+        const browser = localStorage.getItem('browser');
+
+        fetch('http://localhost:7000/access', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 rollno: rollno,
-                password: password
+                password: password,
+                browserName: browser
         })
         })
         .then((response)=> {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
             if (data.success === true) {
                 result.innerHTML = `<h2>${data.message}</h1>`;
                 result.style.display = 'block';
                 result.style.color = 'green';
+                setTimeout(() => {
+                    window.close();
+                }, 900);
             } else {
                 result.innerHTML = `<h2>${data.message}</h1>`;
                 result.style.display = 'block';
@@ -76,28 +94,33 @@
     submit.addEventListener('click', () => {
         const rollno = document.getElementById('rollno').value;
         const password = document.getElementById('password').value;
-        
-        fetch('https://net-access.onrender.com/access', {
+        const browser = document.getElementById('browser').value;
+
+        fetch('http://localhost:7000/access', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 rollno: rollno,
-                password: password
+                password: password,
+                browserName: browser
         })
         })
         .then((response)=> {
             return response.json();
         })
         .then((data) => {
-            console.log(data);
             if (data.success === true) {
                 localStorage.setItem('rollno', rollno);
                 localStorage.setItem('password', password);
+                localStorage.setItem('browser', browser);
                 result.innerHTML = `<h2>${data.message}</h1>`;
                 result.style.display = 'block';
                 result.style.color = 'green';
+                setTimeout(() => {
+                    window.close();
+                }, 900);
             } else {
                 result.innerHTML = `<h2>${data.message}</h1>`;
                 result.style.display = 'block';
