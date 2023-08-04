@@ -22,14 +22,14 @@
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="text" class="form-control" id="password" name="password">
+                    <input type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelpBlock">
                 </div>
                 <div class="mb-3">
                     <label for="browser" class="form-label">Your Browser</label>
                     <select class="form-select" id="browser" name="browser">
                         <option value="chrome">Chrome (Recommended)</option>
-                        <option value="firefox">Firefox</option>
                         <option value="MicrosoftEdge">Microsoft-Edge</option>
+                        <!-- <option value="firefox">Firefox</option> -->
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary" id="submit">Submit</button>
@@ -58,44 +58,14 @@
         const password = localStorage.getItem('password');
         const browser = localStorage.getItem('browser');
 
-        fetch('http://localhost:7000/access', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                rollno: rollno,
-                password: password,
-                browserName: browser
-        })
-        })
-        .then((response)=> {
-            return response.json();
-        })
-        .then((data) => {
-            if (data.success === true) {
-                result.innerHTML = `<h2>${data.message}</h1>`;
-                result.style.display = 'block';
-                result.style.color = 'green';
-                setTimeout(() => {
-                    window.close();
-                }, 900);
-            } else {
-                result.innerHTML = `<h2>${data.message}</h1>`;
-                result.style.display = 'block';
-                result.style.color = 'red';
-            }
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        document.getElementById('rollno').value = rollno;
+        document.getElementById('password').value = password;
+        document.getElementById('browser').value = browser;
+        sendRequest(rollno, password, browser);
+        
     }
 
-    submit.addEventListener('click', () => {
-        const rollno = document.getElementById('rollno').value;
-        const password = document.getElementById('password').value;
-        const browser = document.getElementById('browser').value;
-
+    function sendRequest(rollno, password, browser){
         fetch('http://localhost:7000/access', {
             method: 'POST',
             headers: {
@@ -118,9 +88,6 @@
                 result.innerHTML = `<h2>${data.message}</h1>`;
                 result.style.display = 'block';
                 result.style.color = 'green';
-                setTimeout(() => {
-                    window.close();
-                }, 900);
             } else {
                 result.innerHTML = `<h2>${data.message}</h1>`;
                 result.style.display = 'block';
@@ -130,6 +97,14 @@
         .catch((error) => {
             console.error('Error:', error);
         });
+    }
+
+    submit.addEventListener('click', () => {
+        const rollno = document.getElementById('rollno').value;
+        const password = document.getElementById('password').value;
+        const browser = document.getElementById('browser').value;
+
+        sendRequest(rollno, password, browser);
     })
 
 </script>
