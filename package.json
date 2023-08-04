@@ -40,7 +40,15 @@
     "productName": "Net Access",
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "allowToChangeInstallationDirectory": true,
+      "perMachine": true,
+      "allowElevation": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Net Access",
+      "installerLanguages": "en_US",
+      "deleteAppDataOnUninstall": true,
+      "multiLanguageInstaller": true
     },
     "files": [
       "main.js",

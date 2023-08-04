@@ -1,8 +1,9 @@
-const { app, BrowserWindow, Notification } = require("electron");
+const { app, BrowserWindow, Notification,Tray, Menu } = require("electron");
 const Store = require('electron-store');
 const store = new Store();
 
 const path = require("path");
+const isSecondInstance = app.requestSingleInstanceLock();
 
 
 const express = require('express');
@@ -13,6 +14,7 @@ expressApp.use(cors())
 
 
 let error = ""
+
 const notification_for_success = {
   title: 'Net Access',
   body: 'Net access granted for one day!!',
@@ -25,7 +27,7 @@ const notification_for_error = {
   icon: __dirname + '/icon.png',
 }
 let timer = null;
-
+let tray = null
 
 const child_process = require('child_process');
 const chromeDriverPath = path.join(__dirname, 'driver', 'win', 'chromedriver', 'chromedriver.exe');
@@ -40,9 +42,7 @@ expressApp.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-expressApp.listen(7000, () => {
-  console.log("server is running");
-})
+
 
 expressApp.use(express.urlencoded({ extended: true }));
 expressApp.use(express.json());
@@ -165,8 +165,8 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 850,
-    height: 700,
+    width: 900,
+    height: 740,
     autoHideMenuBar: true,
     title: 'Net Access',
     icon: __dirname + '/icon.png',
@@ -197,10 +197,27 @@ function createWindow() {
   });
 }
 
-app.on("ready", createWindow);
 
-const { Tray, Menu } = require('electron')
-let tray = null
+if(!isSecondInstance){
+  app.quit();
+}
+else{
+  expressApp.listen(7000, () => {
+    console.log("server is running");
+  })
+  app.on("ready", createWindow);
+  
+  app.on("second-instance", () => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+      mainWindow.show();
+      mainWindow.focus();
+    }
+  });
+}
+
 
 app.whenReady().then(() => {
   tray = new Tray(__dirname + '/icon.png')
@@ -217,11 +234,12 @@ app.whenReady().then(() => {
   tray.on('click', () => {
     mainWindow.show();
   })
-
-  app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow()
-  })
 })
+
+app.on('activate', function () {
+  if (BrowserWindow.getAllWindows().length === 0) createWindow()
+})
+
 
 app.setLoginItemSettings({
   openAtLogin: true,
