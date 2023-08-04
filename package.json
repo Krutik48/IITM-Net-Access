@@ -29,6 +29,11 @@
   },
   "build": {
     "appId": "com.iitmnetaccess.app",
+    "win":{
+      "target": "nsis",
+      "publisherName": "Krutik Malani",
+      "signingHashAlgorithms": ["sha256"]
+    },
     "productName": "Net Access",
     "nsis": {
       "oneClick": false,
