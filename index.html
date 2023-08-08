@@ -66,6 +66,9 @@
     }
 
     function sendRequest(rollno, password, browser){
+        result.innerHTML = `<h2>Logging in...</h1>`;
+        result.style.display = 'block';
+        result.style.color = 'black';
         fetch('http://localhost:7000/access', {
             method: 'POST',
             headers: {
