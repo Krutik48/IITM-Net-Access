@@ -7,7 +7,7 @@ The "Net Access" application simplifies and automates the process of gaining net
 # **Usage:**
 
 ### **Installation**:
-Users need to install the Net Access app on their devices. The installation process is simple and doesn't require advanced technical knowledge.
+Users need to install the [Net Access](https://github.com/Krutik48/IITM-Net-Access/releases) app on their devices. The installation process is simple and doesn't require advanced technical knowledge.
 
 ### **Initial Credential Entry**:
  Upon the first launch, users are prompted to enter their IIT Madras credentials, including their roll number and password.
