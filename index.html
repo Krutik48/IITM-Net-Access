@@ -61,6 +61,7 @@
         document.getElementById('rollno').value = rollno;
         document.getElementById('password').value = password;
         document.getElementById('browser').value = browser;
+        submit.disabled = true;
         sendRequest(rollno, password, browser);
         
     }
@@ -84,6 +85,7 @@
             return response.json();
         })
         .then((data) => {
+            submit.disabled = false;
             if (data.success === true) {
                 localStorage.setItem('rollno', rollno);
                 localStorage.setItem('password', password);
@@ -95,6 +97,9 @@
                 result.innerHTML = `<h2>${data.message}</h1>`;
                 result.style.display = 'block';
                 result.style.color = 'red';
+                submit.innerText = 'Retry';
+                submit.classList.replace("btn-primary","btn-danger")
+                alert("Check your roll-no & password or Lan connection");
             }
         })
         .catch((error) => {
@@ -106,7 +111,7 @@
         const rollno = document.getElementById('rollno').value;
         const password = document.getElementById('password').value;
         const browser = document.getElementById('browser').value;
-
+        submit.disabled = true;
         sendRequest(rollno, password, browser);
     })
 

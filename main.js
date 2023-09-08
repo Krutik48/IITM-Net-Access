@@ -26,7 +26,7 @@ const notification_for_error = {
   body: 'Something went wrong!!',
   icon: __dirname + '/icon.png',
 }
-let timer = null;
+
 let tray = null
 
 const child_process = require('child_process');
@@ -115,16 +115,10 @@ expressApp.post('/access', (req, res) => {
             let myNotification = new Notification(notification_for_success)
             myNotification.show()
             store.set('isOneTimeSuccess', true);
-            store.set('time', date.getTime());
             setTimeout(() => {
-              mainWindow.hide();
+              mainWindow.destroy()
+              app.quit()
             }, 1000);
-            if (timer) {
-              clearTimeout(timer);
-            }
-            timer = setTimeout(() => {
-              checkForNetAccess();
-            }, 1000 * 60 * 60 * 24);
           })
           .catch((err) => {
             driver.close()
@@ -244,7 +238,3 @@ app.on('activate', function () {
 app.setLoginItemSettings({
   openAtLogin: true,
 });
-
-function checkForNetAccess() {
-  mainWindow.webContents.reload();
-}
